@@ -1,0 +1,14 @@
+{
+  "name": "megycakes-assets",
+  "private": true,
+  "scripts": {
+    "dev:css": "tailwindcss -i src/main/tailwind/input.css -o src/main/resources/static/assets/app.css --watch",
+    "build:css": "tailwindcss -i src/main/tailwind/input.css -o src/main/resources/static/assets/app.css --minify"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.14",
+    "postcss": "^8.4.47",
+    "autoprefixer": "^10.4.20",
+    "htmx.org": "^1.9.12"
+  }
+}

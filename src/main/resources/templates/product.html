@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html th:replace="~{fragments/layout :: layout (~{::title}, ~{::section})}" lang="en">
+<head><title th:text="${product.name}">Product</title></head>
+<body>
+<section>
+  <div class="grid md:grid-cols-2 gap-6">
+    <div class="aspect-[4/3] bg-stone-100 rounded"></div>
+    <div>
+      <h1 class="text-3xl font-bold" th:text="${product.name}">Name</h1>
+      <div class="mt-2 text-stone-600" th:text="${product.description}">Description</div>
+      <div class="mt-4 text-2xl font-semibold"
+           th:text="${#numbers.formatDecimal(product.priceCents/100.0,1,2)} + ' €'">0.00 €</div>
+
+      <form th:action="@{|/cart/add/${product.id}|}" method="post"
+            th:attr="hx-post=@{|/cart/add/${product.id}|}"
+            hx-target="#mini-cart" hx-swap="outerHTML" class="mt-4 flex items-center gap-2">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <input type="number" name="qty" value="1" min="1" class="w-16 border rounded px-2 py-1"/>
+        <button type="submit" class="px-4 py-2 rounded bg-stone-900 text-white">Add to cart</button>
+      </form>
+    </div>
+  </div>
+</section>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html th:replace="~{fragments/layout :: layout (~{::title}, ~{::section})}" lang="en"><head>
+  <title>MegyCakes — Home</title>
+</head>
+<body>
+<section>
+  <h1 class="text-3xl font-bold mb-4">Fresh & Sweet</h1>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+    <div th:each="p : ${products}" class="bg-white rounded shadow p-3">
+      <a th:href="@{|/p/${p.slug}|}" class="block group">
+      <div class="aspect-[4/3] bg-stone-100 rounded mb-2 flex items-center justify-center">
+        <span class="text-stone-400 text-sm">image</span>
+      </div>
+        <h3 class="mt-2 font-medium group-hover:underline" th:text="${p.name}">Product</h3>
+      </a>
+      <div class="text-stone-600 text-sm"
+           th:text="${#numbers.formatDecimal(p.priceCents / 100.0,1,2)} + ' €'">0.00 €</div>
+    </div>
+  </div>
+</section>
+</body>
+</html>

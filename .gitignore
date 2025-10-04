@@ -1,0 +1,6 @@
+target/
+.idea/
+*.iml
+.DS_Store
+node_modules/
+src/main/resources/static/assets/app.css

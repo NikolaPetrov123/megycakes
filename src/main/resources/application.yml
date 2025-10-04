@@ -1,0 +1,26 @@
+server:
+  port: 8081
+
+spring:
+  thymeleaf:
+    cache: false
+
+  datasource:
+    url: jdbc:postgresql://127.0.0.1:5433/megycakes   # use 5433 here
+    username: megy
+    password: megy
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info"

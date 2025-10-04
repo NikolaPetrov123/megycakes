@@ -1,0 +1,14 @@
+services:
+  db:
+    image: postgres:16
+    container_name: megycakes-db
+    environment:
+      POSTGRES_DB: megycakes
+      POSTGRES_USER: megy
+      POSTGRES_PASSWORD: megy
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata:

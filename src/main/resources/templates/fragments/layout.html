@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" th:fragment="layout (title, content)">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title th:text="${title}">MegyCakes</title>
+  <link rel="stylesheet" th:href="@{/assets/app.css}"/>
+  <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+  <!-- CSRF meta for HTMX -->
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+  <script>
+    // Add CSRF header to every HTMX request
+    document.addEventListener("htmx:configRequest", (e) => {
+      const token = document.querySelector('meta[name="_csrf"]')?.getAttribute('content');
+      const header = document.querySelector('meta[name="_csrf_header"]')?.getAttribute('content');
+      if (token && header) { e.detail.headers[header] = token; }
+    });
+  </script>
+</head>
+<body class="min-h-screen bg-stone-50 text-stone-800">
+<header class="p-4 shadow bg-white">
+  <div class="max-w-5xl mx-auto flex items-center justify-between gap-4">
+    <a th:href="@{/}" class="text-2xl font-bold">MegyCakes</a>
+    <nav class="flex gap-3 text-sm">
+    <a th:href="@{/welcome}" class="hover:underline">Welcome</a>
+
+    <!-- All products link (highlighted when no category filter) -->
+    <a th:href="@{/}" class="hover:underline"
+       th:classappend="${currentCategory} == null ? 'font-semibold underline' : ''">All</a>
+
+    <!-- Category links; highlight the active one -->
+    <a th:each="cat : ${categories}"
+       th:href="@{|/c/${cat.slug}|}"
+       th:text="${cat.name}"
+       class="hover:underline"
+    ></a>
+  </nav>
+    <div id="mini-cart" th:insert="~{fragments/cart-mini :: mini}"></div>
+  </div>
+</header>
+
+<main class="max-w-5xl mx-auto p-4" th:replace="${content}"></main>
+
+<footer class="max-w-5xl mx-auto p-4 text-sm text-stone-500">
+  &copy; <span th:text="${#dates.format(#dates.createNow(),'yyyy')}"></span> MegyCakes
+</footer>
+</body>
+</html>

@@ -1,0 +1,7 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:replace="~{cart :: body}"></div>
+<div id="mini-cart" hx-swap-oob="true" th:insert="~{fragments/cart-mini :: mini}"></div>
+</body>
+</html>
