@@ -16,5 +16,5 @@ public class CartItem {
     public int getQuantity() { return quantity; }
     public void setQuantity(int quantity) { this.quantity = quantity; }
 
-    public int lineTotalCents() { return priceCents * quantity; }
+    public int getLineTotalCents() { return priceCents * quantity; }
 }

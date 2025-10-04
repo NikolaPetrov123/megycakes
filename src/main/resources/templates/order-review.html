@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" th:replace="~{fragments/layout :: layout(~{::title}, ~{::section})}">
+<head>
+  <title>Order placed • MegyCakes</title>
+</head>
+<body>
+<section>
+  <h1 class="text-2xl font-bold mb-4">Thank you!</h1>
+  <p class="mb-2">Your order <strong th:text="${order.orderNumber}">ORDERNUM</strong> was created.</p>
+
+  <div class="border rounded p-4 bg-white">
+    <h2 class="font-semibold mb-2">Summary</h2>
+    <ul class="space-y-1" th:if="${order.items}">
+      <li th:each="it : ${order.items}" class="flex justify-between">
+        <span th:text="${it.nameSnapshot} + ' × ' + ${it.quantity}"></span>
+        <span th:text="${#numbers.formatDecimal(it.getPriceCentsSnapshot() * it.quantity / 100.0, 1, 'COMMA', 2, 'POINT')} + ' €'"></span>
+      </li>
+    </ul>
+    <hr class="my-3"/>
+    <div class="flex justify-between">
+      <span>Delivery</span>
+      <span th:text="${order.deliveryMethod == 'LOCAL_PICKUP'} ? '0.00 €' : ${#numbers.formatDecimal(order.deliveryFeeCents / 100.0, 1, 'COMMA', 2, 'POINT')} + ' €'"></span>
+    </div>
+    <div class="flex justify-between font-bold text-lg">
+      <span>Total</span>
+      <span th:text="${#numbers.formatDecimal(order.getTotalCents() / 100.0, 1, 'COMMA', 2, 'POINT')} + ' €'"></span>
+    </div>
+  </div>
+
+  <a th:href="@{/}" class="inline-block mt-4 underline">Back to catalog</a>
+</section>
+</body>
+</html>

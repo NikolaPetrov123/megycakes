@@ -1,7 +1,12 @@
 package com.megycakes.cart;
 
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.annotation.SessionScope;
+
 import java.util.*;
 
+@Component
+@SessionScope
 public class Cart {
     private final Map<Long, CartItem> items = new LinkedHashMap<>();
 
@@ -22,7 +27,7 @@ public class Cart {
     public void remove(Long id) { items.remove(id); }
 
     public int totalCents() {
-        return items.values().stream().mapToInt(CartItem::lineTotalCents).sum();
+        return items.values().stream().mapToInt(CartItem::getLineTotalCents).sum();
     }
 
     public int itemCount() {
@@ -30,4 +35,8 @@ public class Cart {
     }
 
     public boolean isEmpty() { return items.isEmpty(); }
+
+    public void clear() {
+        items.clear();
+    }
 }
