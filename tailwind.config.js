@@ -1,5 +1,11 @@
-module.exports = {
-  content: ["./src/main/resources/templates/**/*.{html,thymeleaf}", "./src/main/resources/static/**/*.js"],
-  theme: { extend: {} },
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    "./src/main/resources/templates/**/*.html",
+    "./src/main/resources/static/**/*.js"
+  ],
+  theme: {
+    extend: {}
+  },
   plugins: []
-};
+}
