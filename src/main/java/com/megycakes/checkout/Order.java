@@ -180,4 +180,14 @@ public class Order {
 
     public List<OrderItem> getItems() { return items; }
     public void setItems(List<OrderItem> items) { this.items = items; }
+
+    /**
+     * Region/state placeholder.
+     * We currently don't store a dedicated region field, so we derive a best-effort value.
+     * For now, return the city if available, otherwise an empty string.
+     * (Safe for email templates that render this optionally.)
+     */
+    public String getRegion() {
+        return city != null ? city : "";
+    }
 }

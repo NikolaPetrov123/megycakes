@@ -1,3 +1,4 @@
+
 server:
   port: 8081
 
@@ -5,15 +6,14 @@ spring:
   thymeleaf:
     cache: false
 
-    spring:
-      mail:
-        host: localhost     # MailHog default
-        port: 1025          # MailHog SMTP port
-        username:
-        password:
-        properties:
-          mail.smtp.auth: false
-          mail.smtp.starttls.enable: false
+  mail:
+    host: localhost     # MailHog default
+    port: 1025          # MailHog SMTP port
+    username:
+    password:
+    properties:
+      mail.smtp.auth: false
+      mail.smtp.starttls.enable: false
 
   datasource:
     url: jdbc:postgresql://127.0.0.1:5433/megycakes   # use 5433 here
@@ -34,3 +34,11 @@ management:
     web:
       exposure:
         include: "health,info"
+
+app:
+  base-url: http://localhost:8081
+  mail:
+    from: noreply@megycakes.local
+    reply-to: orders@your-domain.tld
+    bcc: owner@your-domain.tld
+
