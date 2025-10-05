@@ -1,10 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+  <meta charset="UTF-8"/>
+  <title>Order confirmation</title>
 </head>
-<body>
+<body style="font-family:Arial,Helvetica,sans-serif; color:#222;">
+<h2>Thanks for your order, <span th:text="${order.customerName}">Customer</span> 🎉</h2>
 
+<p>
+  We’ve received your order
+  <strong th:text="${order.orderNumber}">ORDERNUM</strong>.
+</p>
+
+<h3>Summary</h3>
+<ul style="padding-left:16px;">
+  <li th:each="it : ${order.items}">
+    <span th:text="${it.nameSnapshot}">Item name</span>
+    &times; <span th:text="${it.quantity}">1</span>
+    — <span th:text="${#numbers.formatDecimal(it.priceCentsSnapshot / 100.0,1,2)}">0.00</span>
+    <span th:text="${order.currency}">EUR</span>
+  </li>
+</ul>
+
+<p>
+  <strong>Total:</strong>
+  <span th:text="${#numbers.formatDecimal(order.totalCents / 100.0,1,2)}">0.00</span>
+  <span th:text="${order.currency}">EUR</span>
+</p>
+
+<div th:if="${order.isPickup()}">
+  <h3>Pickup</h3>
+  <p>Pickup at the shop. We’ll email you when it’s ready.</p>
+</div>
+<div th:if="${!order.isPickup()}">
+  <h3>Delivery</h3>
+  <p>
+    <span th:text="${order.addressLine1}">Address 1</span><br/>
+    <span th:text="${order.addressLine2}">Address 2</span><br th:if="${order.addressLine2 != null}"/>
+    <span th:text="${order.postalCode}">0000</span>,
+    <span th:text="${order.city}">City</span>,
+    <span th:text="${order.country}">Country</span>
+  </p>
+</div>
+
+<p style="margin-top:24px;">
+  You can review your order here:
+  <a th:href="@{|${baseUrl}/order/${order.orderNumber}|}" th:text="@{|${baseUrl}/order/${order.orderNumber}|}">order link</a>
+</p>
+
+<p style="color:#666;">If you didn’t place this order, please ignore this email.</p>
 </body>
 </html>

@@ -7,14 +7,13 @@ spring:
 
     spring:
       mail:
-        host: localhost
-        port: 1025
-        protocol: smtp
+        host: localhost     # MailHog default
+        port: 1025          # MailHog SMTP port
+        username:
+        password:
         properties:
-          mail:
-            smtp:
-              auth: false
-              starttls.enable: false
+          mail.smtp.auth: false
+          mail.smtp.starttls.enable: false
 
   datasource:
     url: jdbc:postgresql://127.0.0.1:5433/megycakes   # use 5433 here

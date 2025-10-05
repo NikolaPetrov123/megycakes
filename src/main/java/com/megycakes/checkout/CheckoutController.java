@@ -1,6 +1,7 @@
 package com.megycakes.checkout;
 
 import com.megycakes.cart.Cart;
+import com.megycakes.mail.MailService;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
@@ -14,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import com.megycakes.mail.MailService;
 
 @Controller
 public class CheckoutController {
@@ -21,11 +23,13 @@ public class CheckoutController {
     private final CheckoutService checkoutService;
     private final OrderRepository orders;
     private final Cart cart;
+    private final MailService mailService;
 
-    public CheckoutController(CheckoutService checkoutService, OrderRepository orders, Cart cart) {
+    public CheckoutController(CheckoutService checkoutService, OrderRepository orders, Cart cart, MailService mailService) {
         this.checkoutService = checkoutService;
         this.orders = orders;
         this.cart = cart;
+        this.mailService = mailService;
     }
 
     @GetMapping("/checkout")
@@ -80,11 +84,12 @@ public class CheckoutController {
             orders.save(order);
         }
 
+        mailService.sendOrderConfirmation(order.getOrderNumber());
         // clear the session cart after confirmation
         cart.clear();
 
-        ra.addFlashAttribute("orderNumber", order.getOrderNumber());
-        return "redirect:/order/{orderNumber}/thank-you";
+        ra.addFlashAttribute("message", "Order confirmed! A confirmation email was sent.");
+        return "redirect:/order/" + order.getOrderNumber() + "/thank-you";
     }
 
     @GetMapping("/order/{orderNumber}/thank-you")
