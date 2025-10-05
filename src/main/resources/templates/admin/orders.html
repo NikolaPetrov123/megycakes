@@ -1,0 +1,74 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin · Orders</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 2rem; }
+    header, form, table { max-width: 1200px; margin-inline: auto; }
+    table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    th, td { padding: .6rem .8rem; border-bottom: 1px solid #eee; text-align: left; }
+    .badge { padding: .2rem .5rem; border-radius: .4rem; background: #eee; font-size: .85rem; }
+    .row { display: flex; gap: .5rem; align-items: center; }
+    .pagination { margin-top: 1rem; display: flex; gap: .5rem; }
+    .flash { max-width: 1200px; margin: 0.5rem auto; color: #044; background: #e6f7ff; padding: .5rem .75rem; border: 1px solid #b3ecff; border-radius: 6px; }
+    .flash.error { color: #600; background: #ffe6e6; border-color: #ffb3b3; }
+    input[type="text"] { padding: .5rem .6rem; width: 280px; }
+    button, a.button { padding: .45rem .7rem; border: 1px solid #ddd; background:#fafafa; border-radius:6px; text-decoration:none; color:#111; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Orders</h1>
+</header>
+
+<!-- Thymeleaf var hints for IDE (helps resolve warnings) -->
+<!--/*@thymesVar id="success" type="java.lang.String"*/-->
+<!--/*@thymesVar id="error" type="java.lang.String"*/-->
+
+<div th:if="${success ?: param.success}" class="flash" th:text="${success ?: param.success}">Success</div>
+<div th:if="${error ?: param.error}" class="flash error" th:text="${error ?: param.error}">Error</div>
+
+<form method="get" class="row" th:action="@{/admin/orders}">
+  <input type="text" name="q" placeholder="Search order # / email" th:value="${q}">
+  <button type="submit">Search</button>
+  <a class="button" th:href="@{/admin/orders}">Clear</a>
+</form>
+
+<table>
+  <thead>
+  <tr>
+    <th>#ID</th>
+    <th>Order #</th>
+    <th>Email</th>
+    <th>Status</th>
+    <th>Total</th>
+    <th>Created</th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="o : ${orders}">
+    <td th:text="${o.id}">1</td>
+    <td th:text="${o.orderNumber}">ABC123</td>
+    <td th:text="${o.customerEmail}">customer@example.com</td>
+    <td><span class="badge" th:text="${o.status}">NEW</span></td>
+    <td th:text="${(o.totalCents / 100.0)}">0.00</td>
+    <td th:text="${#temporals.format(o.createdAt?.toInstant(), 'yyyy-MM-dd HH:mm')}">2025-01-01</td>
+    <td><a th:href="@{|/admin/orders/${o.id}|}">View</a></td>
+  </tr>
+  </tbody>
+</table>
+
+<div class="pagination" th:if="${orders.totalPages > 1}">
+  <a th:if="${!orders.first}"
+     th:href="@{/admin/orders(page=${orders.number - 1}, size=${orders.size}, q=${q})}">« Prev</a>
+  <span>Page <span th:text="${orders.number + 1}">1</span> of <span th:text="${orders.totalPages}">1</span></span>
+  <a th:if="${!orders.last}"
+     th:href="@{/admin/orders(page=${orders.number+1}, size=${orders.size}, q=${q})}">Next »</a>
+</div>
+
+</body>
+</html>
