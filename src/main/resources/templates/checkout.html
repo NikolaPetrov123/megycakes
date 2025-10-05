@@ -27,21 +27,24 @@
       <div>
         <label class="block text-sm">Phone (optional)</label>
         <input class="border p-2 w-full" th:field="*{phone}"/>
+        <div class="text-red-600 text-sm" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></div>
       </div>
 
       <div class="flex items-center gap-4">
         <label class="inline-flex items-center gap-2">
-          <input type="radio" th:field="*{pickup}" th:value="true" checked> Local pickup
+          <input type="radio" th:field="*{pickup}" th:value="true"/> Local pickup
         </label>
         <label class="inline-flex items-center gap-2">
-          <input type="radio" th:field="*{pickup}" th:value="false"> Delivery (+€5)
+          <input type="radio" th:field="*{pickup}" th:value="false"/> Delivery (+€5)
         </label>
       </div>
 
-      <div th:if="${!form.pickup}" class="space-y-3">
+      <!-- Delivery address only when pickup is false -->
+      <div th:if="${form != null and form.pickup == false}" class="space-y-3">
         <div>
           <label class="block text-sm">Address line 1</label>
           <input class="border p-2 w-full" th:field="*{address1}"/>
+          <div class="text-red-600 text-sm" th:if="${#fields.hasErrors('address1')}" th:errors="*{address1}"></div>
         </div>
         <div>
           <label class="block text-sm">Address line 2</label>
@@ -51,15 +54,18 @@
           <div>
             <label class="block text-sm">City</label>
             <input class="border p-2 w-full" th:field="*{city}"/>
+            <div class="text-red-600 text-sm" th:if="${#fields.hasErrors('city')}" th:errors="*{city}"></div>
           </div>
           <div>
             <label class="block text-sm">Postal code</label>
             <input class="border p-2 w-full" th:field="*{postal}"/>
+            <div class="text-red-600 text-sm" th:if="${#fields.hasErrors('postal')}" th:errors="*{postal}"></div>
           </div>
         </div>
         <div>
           <label class="block text-sm">Country</label>
           <input class="border p-2 w-full" th:field="*{country}" placeholder="BG or similar"/>
+          <div class="text-red-600 text-sm" th:if="${#fields.hasErrors('country')}" th:errors="*{country}"></div>
         </div>
       </div>
 
@@ -84,11 +90,11 @@
         </div>
         <div class="flex justify-between">
           <span>Delivery</span>
-          <span th:text="${form.pickup} ? '0.00 €' : '5.00 €'"></span>
+          <span th:text="${#numbers.formatDecimal(((form != null and form.pickup == false) ? 5.00 : 0.00), 1, 'COMMA', 2, 'POINT')} + ' €'"></span>
         </div>
         <div class="flex justify-between mt-2 text-lg font-bold">
           <span>Total</span>
-          <span th:text="${#numbers.formatDecimal((cart.totalCents() + (form.pickup ? 0 : 500)) / 100.0, 1, 'COMMA', 2, 'POINT')} + ' €'"></span>
+          <span th:text="${#numbers.formatDecimal((cart.totalCents() + ((form != null and form.pickup == false) ? 500 : 0)) / 100.0, 1, 'COMMA', 2, 'POINT')} + ' €'"></span>
         </div>
       </div>
     </aside>

@@ -5,6 +5,17 @@ spring:
   thymeleaf:
     cache: false
 
+    spring:
+      mail:
+        host: localhost
+        port: 1025
+        protocol: smtp
+        properties:
+          mail:
+            smtp:
+              auth: false
+              starttls.enable: false
+
   datasource:
     url: jdbc:postgresql://127.0.0.1:5433/megycakes   # use 5433 here
     username: megy

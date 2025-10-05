@@ -1,6 +1,11 @@
 package com.megycakes.checkout;
 
 import com.megycakes.cart.Cart;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+import com.megycakes.checkout.Order;
+import com.megycakes.checkout.OrderStatus;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -54,9 +59,6 @@ public class CheckoutController {
                 form.getName(), form.getEmail(), form.getPhone(), form.isPickup(),
                 form.getAddress1(), form.getAddress2(), form.getCity(), form.getPostal(), form.getCountry(),
                 cart);
-
-        cart.clear(); // important: empty session cart after order creation
-
         return "redirect:/order/" + order.getOrderNumber();
     }
 
@@ -66,5 +68,30 @@ public class CheckoutController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         model.addAttribute("order", order);
         return "order-review";
+    }
+
+    @PostMapping("/order/{orderNumber}/confirm")
+    public String confirm(@PathVariable("orderNumber") String orderNumber, RedirectAttributes ra) {
+        Order order = orders.findByOrderNumber(orderNumber)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if (order.getStatus() == OrderStatus.NEW) {
+            order.setStatus(OrderStatus.CONFIRMED);
+            orders.save(order);
+        }
+
+        // clear the session cart after confirmation
+        cart.clear();
+
+        ra.addFlashAttribute("orderNumber", order.getOrderNumber());
+        return "redirect:/order/{orderNumber}/thank-you";
+    }
+
+    @GetMapping("/order/{orderNumber}/thank-you")
+    public String thankYou(@PathVariable("orderNumber") String orderNumber, Model model) {
+        Order order = orders.findWithItemsByOrderNumber(orderNumber)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        model.addAttribute("order", order);
+        return "order-thank-you";
     }
 }

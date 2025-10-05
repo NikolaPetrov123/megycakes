@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" th:replace="~{fragments/layout :: layout (~{::title}, ~{::section})}">
+<head>
+  <title>Thank you</title>
+</head>
+<body>
+<section class="max-w-3xl mx-auto p-4" th:with="o=${order}">
+  <h1 class="text-2xl font-bold mb-3">Thank you for your order! 🎉</h1>
+  <p class="mb-4 text-stone-700">
+    Your order <span class="font-semibold" th:text="${o.orderNumber}">ORDERNUM</span> is confirmed.
+  </p>
+
+  <div class="mb-6 text-sm text-stone-700">
+    <div><span class="font-medium">Name:</span> <span th:text="${o.customerName}">Name</span></div>
+    <div><span class="font-medium">Email:</span> <span th:text="${o.customerEmail}">email@example.com</span></div>
+    <div><span class="font-medium">Total:</span> <span th:text="|${#numbers.formatDecimal(order.totalCents / 100.0,1,2)} ${order.currency}|"></span></div>
+  </div>
+
+  <a th:href="@{/}" class="px-4 py-2 bg-stone-900 text-white rounded">Continue shopping</a>
+</section>
+</body>
+</html>

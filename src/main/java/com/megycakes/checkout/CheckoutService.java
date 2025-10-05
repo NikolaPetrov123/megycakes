@@ -28,7 +28,7 @@ public class CheckoutService {
         o.setOrderNumber(generateOrderNumber());
         o.setCustomerName(name);
         o.setCustomerEmail(email);
-        o.setStatus("PENDING");
+        o.setStatus(OrderStatus.NEW);
         o.setCurrency("EUR");
 
         if (pickup) {
